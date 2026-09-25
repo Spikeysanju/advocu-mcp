@@ -1,0 +1,51 @@
+name: Bug report
+description: Advocu MCP misbehaved. Do not paste tokens or private activity text.
+title: "[bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Never paste an Advocu personal API token, Authorization header, or private activity body. A redacted shape is enough.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - MCP tools (list_activities, create_activity_draft, update_activity)
+        - Token forwarding / auth
+        - Advocu API client
+        - Worker deploy or routing
+        - Docs
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What the client or Worker did. Include the MCP method or tool name and the HTTP status if you have them.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected
+      description: What should have happened instead. Drafts must never be submitted.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Client config with the token redacted, tool arguments with private text removed, and the response shape.
+      placeholder: |
+        1. Point an MCP client at https://advocu.sanju.sh/mcp with a redacted bearer token.
+        2. Call create_activity_draft with ...
+        3. See ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Git SHA, release tag, or "production" if you hit the deployed Worker.
+      placeholder: v0.1.0

@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Advocu MCP"
+authors:
+  - name: "THISUX Private Limited"
+    website: "https://thisux.com"
+license: MIT
+repository-code: "https://github.com/thisuxhq/advocu-mcp"
+url: "https://github.com/thisuxhq/advocu-mcp"
+date-released: "2026-09-25"
+version: "0.1.0"

@@ -1,0 +1,29 @@
+name: Feature request
+description: Propose a change to the Advocu MCP tools, Worker, or docs.
+title: "[feature] "
+body:
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case
+      description: Who needs this, and what they cannot do with list_activities, create_activity_draft, or update_activity today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: What should change? If this adds a tool or field, say which docs/API.md route it maps to. Do not propose storing the portal token or submitting drafts.
+    validations:
+      required: true
+  - type: dropdown
+    id: fit
+    attributes:
+      label: Fits current non-goals?
+      description: v1 forwards one caller token per request and never submits drafts.
+      options:
+        - Yes, this stays inside the current contract
+        - No, this needs a product decision first
+        - Not sure
+    validations:
+      required: true
