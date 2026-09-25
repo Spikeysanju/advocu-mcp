@@ -2,7 +2,7 @@
 
 Remote MCP server on Cloudflare Workers for the Advocu GDE Personal API. Three tools: `list_activities`, `create_activity_draft`, `update_activity`. Drafts are never submitted. The caller's portal token is forwarded per request and never stored.
 
-Deployed: `https://advocu-mcp.spikeysanju.workers.dev/mcp`
+Deployed: `https://advocu.sanju.sh/mcp` (also `https://advocu-mcp.spikeysanju.workers.dev/mcp`)
 
 ## Client config
 
@@ -10,7 +10,7 @@ Deployed: `https://advocu-mcp.spikeysanju.workers.dev/mcp`
 {
   "mcpServers": {
     "advocu": {
-      "url": "https://advocu-mcp.spikeysanju.workers.dev/mcp",
+      "url": "https://advocu.sanju.sh/mcp",
       "headers": { "Authorization": "Bearer <advocu-personal-api-token>" }
     }
   }

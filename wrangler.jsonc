@@ -3,5 +3,7 @@
   "name": "advocu-mcp",
   "main": "src/index.ts",
   "compatibility_date": "2026-09-25",
-  "observability": { "enabled": true }
+  "observability": { "enabled": true },
+  "workers_dev": true,
+  "routes": [{ "pattern": "advocu.sanju.sh", "custom_domain": true }]
 }
