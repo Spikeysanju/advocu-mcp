@@ -11,7 +11,8 @@ The only secret in this system is the caller's Advocu personal API token.
 5. Do not accept the token as a tool argument. Tool arguments land in the model transcript.
 6. Do not log request or response bodies. Activity text can be private. Headers can hold the token.
 7. Logs may include MCP method, Advocu path, HTTP status, and duration. Nothing else from the request.
-8. `GET /health` and `GET /` must not echo headers.
+8. `GET /health`, `GET /`, and `GET /setup` must not echo headers.
+9. `/setup` splices the token into client snippets in the browser only. No form, fetch, query string, or storage. It ships a CSP with `default-src 'none'`, `form-action 'none'`, and no external scripts.
 
 ## Missing or bad token
 

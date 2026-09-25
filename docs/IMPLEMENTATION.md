@@ -14,7 +14,8 @@ Do not use `McpAgent`. It is the old Durable Object path. This server is statele
 ## Files
 
 ```
-src/index.ts     Hono app, /mcp, /health, /
+src/index.tsx    Hono app, /mcp, /health, /, /setup
+src/setup.tsx    /setup page (JSX)
 src/advocu.ts    base URL, bearer forward, error mapping
 src/tools.ts     three tools and server instructions
 src/validate.ts  strip and check fields per type
@@ -41,7 +42,7 @@ No KV, D1, or Durable Object bindings.
    - Register `list_activities`, `create_activity_draft`, `update_activity`.
    - Register the server instructions from [TOOLS.md](./TOOLS.md).
    - Read the bearer token from the request. If it is missing, return the missing-token error and do not fetch.
-5. Add `src/index.ts`.
+5. Add `src/index.tsx`.
    - `GET /health` → `{ "ok": true, "name": "advocu" }`
    - `GET /` → one line of plain text pointing at `/mcp` and the portal.
    - `ALL /mcp` → MCP handler.

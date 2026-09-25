@@ -28,14 +28,15 @@ Do not invent a field, route, enum, or error shape that is not in `docs/API.md`.
 - `github-repository` and `youtube-video` can be listed. They cannot be created or updated.
 - Do not set `private` unless the user asked for private or public.
 - Do not invent metrics, attendee counts, countries, cities, or links. Omit fields the user did not give.
-- `GET /health` and `GET /` must not echo headers.
+- `GET /health`, `GET /`, and `GET /setup` must not echo headers. `/setup` builds client snippets in the browser. The token is never sent to the Worker.
 
 Product token rules: [docs/SECURITY.md](docs/SECURITY.md). Vulnerability reports: [SECURITY.md](SECURITY.md), email hi@sanju.sh, subject `[security] advocu-mcp`. Do not open a public issue for those.
 
 ## Layout
 
 ```
-src/index.ts     Hono app, /mcp, /health, /
+src/index.tsx    Hono app, /mcp, /health, /, /setup
+src/setup.tsx    /setup page (JSX). Token stays in the browser.
 src/advocu.ts    fetch wrapper, bearer forward, base URL
 src/tools.ts     the three tools
 src/validate.ts  draft types, allowed fields, enums

@@ -54,7 +54,8 @@ A Worker calls Advocu from Cloudflare egress, not from the user's home IP. Every
 ## Files to add when building
 
 ```
-src/index.ts        Hono app, /mcp, /health
+src/index.tsx       Hono app, /mcp, /health, /setup
+src/setup.tsx       /setup page, client-side token snippets
 src/advocu.ts       fetch wrapper, base URL, bearer forward
 src/tools.ts        the three tools
 wrangler.jsonc

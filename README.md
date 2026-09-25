@@ -32,6 +32,10 @@ Deployed: `https://advocu.sanju.sh/mcp` (also `https://advocu-mcp.spikeysanju.wo
 
 ## Client config
 
+Easiest: open [advocu.sanju.sh/setup](https://advocu.sanju.sh/setup), paste your token, and copy the snippet for your client. The token stays in your browser.
+
+Or by hand:
+
 ```json
 {
   "mcpServers": {

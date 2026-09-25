@@ -216,6 +216,27 @@ describe("without a token", () => {
     const cfg = readFileSync(new URL("../wrangler.jsonc", import.meta.url), "utf8");
     expect(cfg).not.toMatch(/kv_namespaces|d1_databases|durable_objects/);
   });
+
+  it("A-16 GET /setup is a self-contained page that never takes the token server-side", async () => {
+    const res = await app.request("https://advocu.example/setup", {
+      headers: { authorization: `Bearer ${TOKEN}`, "x-probe": "echo-me" },
+    });
+    expect(res.status).toBe(200);
+    expect(res.headers.get("content-type")).toContain("text/html");
+    const csp = res.headers.get("content-security-policy") ?? "";
+    expect(csp).toContain("default-src 'none'");
+    expect(csp).toContain("form-action 'none'");
+    expect(res.headers.get("cache-control")).toBe("no-store");
+    const body = await res.text();
+    expect(body).toContain("https://app.advocu.com/settings/integrations/personal-api");
+    expect(body).toContain("https://advocu.example/mcp");
+    for (const name of ["list_activities", "create_activity_draft", "update_activity"]) expect(body).toContain(name);
+    expect(body).toContain('href="https://sanju.sh"');
+    expect(body).not.toContain("<form");
+    expect(body).not.toMatch(/<script[^>]+src=/);
+    expect(body).not.toContain(TOKEN);
+    expect(body).not.toContain("echo-me");
+  });
 });
 
 describe("list_activities shaping", () => {

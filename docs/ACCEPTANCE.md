@@ -21,6 +21,7 @@ v1 is done when every row below is true. Token rows are manual. The owner runs t
 | A-13 | Logs from a request that included a bearer token do not contain that token. | |
 | A-14 | Tool list is exactly `list_activities`, `create_activity_draft`, `update_activity`. | |
 | A-15 | `wrangler.jsonc` has no KV, D1, or Durable Object bindings. | |
+| A-16 | `GET /setup` returns HTML with the portal link, the `/mcp` URL, and the three tools. It has a strict CSP, no `<form>`, no external script, and does not echo headers. | |
 
 ## With the owner's token
 

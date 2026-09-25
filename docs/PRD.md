@@ -115,6 +115,7 @@ Should. Do these unless they block the musts.
 | SR-3 | `GET /` returns a short plain-text hint: this is the Advocu MCP, tools are at `/mcp`, tokens come from the portal. |
 | SR-4 | Known enum fields are rejected locally before the Advocu call. |
 | SR-5 | URLs that fail `^https?://` are rejected locally. |
+| SR-6 | `GET /setup` is a one-page setup: portal token link, a token input, and copy-ready snippets for Claude Code, Cursor, VS Code, Windsurf, Codex, and Claude Desktop. ChatGPT is shown as unsupported. The token never leaves the browser. |
 
 Will not.
 
