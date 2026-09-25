@@ -1,6 +1,6 @@
 # Advocu MCP
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Copyright](https://img.shields.io/badge/©-THISUX%20Private%20Limited-111111.svg)](LICENSE)
 
 Remote MCP server on Cloudflare Workers for the Advocu GDE Personal API. Three tools: `list_activities`, `create_activity_draft`, `update_activity`. Drafts are never submitted. The caller's portal token is forwarded per request and never stored.
@@ -47,4 +47,4 @@ Specs live in [docs/](./docs/README.md).
 
 Copyright © 2026 [THISUX Private Limited](https://thisux.com).
 
-Released under the [MIT License](LICENSE). You may use, modify, and distribute this project for personal and commercial purposes, provided the copyright and permission notice are retained.
+Released under the [Apache License, Version 2.0](LICENSE). You may use, modify, and distribute this project for personal and commercial purposes, provided you keep the copyright, patent, and attribution notices. See [NOTICE](NOTICE).

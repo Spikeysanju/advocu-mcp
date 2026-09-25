@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping with Advocu MCP. This is a remote MCP server on Cloudflare Workers for the Advocu GDE Personal API. Contributions are licensed under the same [MIT License](LICENSE), with copyright held by THISUX Private Limited.
+Thanks for helping with Advocu MCP. This is a remote MCP server on Cloudflare Workers for the Advocu GDE Personal API. Contributions are licensed under the [Apache License, Version 2.0](LICENSE), with copyright held by THISUX Private Limited.
 
 By submitting a pull request, you agree that your contribution is provided under that license and copyright.
 

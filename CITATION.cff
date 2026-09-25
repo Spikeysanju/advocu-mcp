@@ -5,7 +5,7 @@ title: "Advocu MCP"
 authors:
   - name: "THISUX Private Limited"
     website: "https://thisux.com"
-license: MIT
+license: Apache-2.0
 repository-code: "https://github.com/thisuxhq/advocu-mcp"
 url: "https://github.com/thisuxhq/advocu-mcp"
 date-released: "2026-09-25"
