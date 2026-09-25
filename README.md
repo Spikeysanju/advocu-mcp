@@ -7,6 +7,14 @@ Remote MCP server on Cloudflare Workers for the Advocu GDE Personal API. Three t
 
 Created by [Sanju Sivalingam](https://sanju.sh), founder of [THISUX](https://thisux.com).
 
+We contribute a lot. Then we forget to write it down.
+
+You spend the weekend traveling state to state. You give the talk. You inspire people, teach them something, and share what you learned. By Monday that work is already gone, because it never made it into the portal. A contribution that is not logged may as well not have happened.
+
+That was my problem. I am excited for the event, the community, the chance to show up. Sitting down afterward to fill every field is a different job. It is slow, and it is boring. I do not have the patience for it. If that is you too, this is the fix.
+
+This MCP is already deployed. Get a personal API token from the [Advocu portal](https://app.advocu.com/settings/integrations/personal-api) and ask your agent to connect this server with that token. Then hand it the photos, the links, or the slides. It pulls out what it can, asks what it still needs, and creates a draft. You read it and submit it in the portal. The weekend stays about the people. The form does not get another evening.
+
 ## Tools
 
 Auth is the request header `Authorization: Bearer <token>`. It is not a tool argument. Field rules are in [docs/TOOLS.md](docs/TOOLS.md).
