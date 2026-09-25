@@ -2,7 +2,6 @@ import { html, raw } from "hono/html";
 
 // The setup page. The token is typed into the page and spliced into snippets by the inline script.
 // It is never sent to this Worker: no form, no fetch, no query string, no storage.
-
 export const PORTAL_TOKEN_URL = "https://app.advocu.com/settings/integrations/personal-api";
 const PLACEHOLDER = "<advocu-personal-api-token>";
 
@@ -107,14 +106,16 @@ const TOOLS = [
 
 const STYLE = `
 :root {
-  --bg: #fbfaf8; --surface: #ffffff; --text: #1d1c1a; --muted: #6b6862; --line: #e7e4de;
-  --accent: #1a73e8; --accent-text: #ffffff; --code-bg: #f4f2ee; --ok: #188038; --warn-bg: #fdf6e3; --warn: #8a6100;
+  --bg: #ffffff; --bg-2: #fafafa; --text: #171717; --text-2: #5c5c5c;
+  --line: #ebebeb; --line-2: #d4d4d4; --focus: #0068d6;
+  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #131312; --surface: #1c1b1a; --text: #eceae6; --muted: #9c9891; --line: #2e2c29;
-    --accent: #8ab4f8; --accent-text: #0b1a33; --code-bg: #232220; --ok: #81c995; --warn-bg: #2a2416; --warn: #e6c36a;
+    --bg: #0a0a0a; --bg-2: #111111; --text: #ededed; --text-2: #a1a1a1;
+    --line: #242424; --line-2: #3a3a3a; --focus: #52a8ff;
     color-scheme: dark;
   }
 }
@@ -122,72 +123,103 @@ const STYLE = `
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0; background: var(--bg); color: var(--text);
-  font: 16px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  -webkit-font-smoothing: antialiased;
+  font: 400 16px/24px var(--sans); -webkit-font-smoothing: antialiased; font-synthesis: none;
 }
-main { max-width: 720px; margin: 0 auto; padding: 56px 16px 32px; }
-h1 { font-size: 32px; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 12px; text-wrap: balance; }
-h2 { font-size: 18px; margin: 0 0 4px; letter-spacing: -0.01em; }
-p { margin: 0; }
-.lede { color: var(--muted); font-size: 17px; max-width: 58ch; text-wrap: pretty; }
-.eyebrow { font-size: 13px; font-weight: 600; color: var(--accent); letter-spacing: 0.02em; margin-bottom: 10px; }
-section { margin-top: 40px; }
-.step { display: grid; grid-template-columns: 28px 1fr; gap: 14px; }
-.num {
-  width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface);
-  display: grid; place-items: center; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums;
-}
-.hint { color: var(--muted); font-size: 14px; margin-bottom: 14px; }
+h1, h2, h3, p, ol { margin: 0; padding: 0; }
+a { color: inherit; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+code, pre, .mono { font-family: var(--mono); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+.skip { position: absolute; left: -9999px; }
+.skip:focus { left: 16px; top: 16px; padding: 8px 12px; background: var(--bg); z-index: 1; }
+
+.shell { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+.grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; }
+.grid > * { min-width: 0; }
+
+.masthead { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 24px 0 0; font-size: 14px; line-height: 20px; }
+.identity { font-weight: 600; letter-spacing: -0.01em; }
+.meta { display: flex; gap: 20px; color: var(--text-2); }
+
+.opening { padding: 96px 0 64px; }
+.opening > div { grid-column: 1 / span 8; display: grid; gap: 16px; }
+h1 { font-size: 48px; line-height: 52px; font-weight: 600; letter-spacing: -0.045em; text-wrap: balance; }
+.lede { font-size: 20px; line-height: 30px; color: var(--text-2); max-width: 36em; text-wrap: pretty; }
+
+.steps { list-style: none; }
+.step { padding: 32px 0; border-top: 1px solid var(--line); row-gap: 16px; }
+.step-head { grid-column: 1 / span 4; display: grid; grid-template-columns: 24px 1fr; column-gap: 12px; row-gap: 4px; align-content: start; }
+.step-num { font-weight: 500; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.step-head h2 { font-size: 16px; line-height: 24px; font-weight: 600; letter-spacing: -0.01em; }
+.step-head p { grid-column: 2; color: var(--text-2); font-size: 14px; line-height: 20px; }
+.step-body { grid-column: 5 / span 8; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; align-content: start; }
+
 .btn {
-  display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 10px;
-  background: var(--accent); color: var(--accent-text); font: inherit; font-size: 15px; font-weight: 600;
-  text-decoration: none; border: 0; cursor: pointer; transition: transform 120ms ease, opacity 120ms ease;
+  display: inline-flex; align-items: center; justify-self: start; height: 40px; padding: 0 16px; border-radius: 6px;
+  background: var(--text); color: var(--bg); font: 500 14px/20px var(--sans); text-decoration: none; border: 0; cursor: pointer;
+  transition: opacity 150ms ease, transform 150ms ease;
 }
-.btn:hover { opacity: 0.92; }
-.btn:active { transform: scale(0.97); }
+.btn:hover { opacity: 0.86; }
+.btn:active, .btn-2:active { transform: scale(0.97); }
+.btn-2 {
+  height: 40px; padding: 0 14px; border-radius: 6px; border: 1px solid var(--line-2); background: var(--bg);
+  color: var(--text); font: 500 14px/20px var(--sans); cursor: pointer; transition: background 150ms ease, transform 150ms ease;
+}
+.btn-2:hover { background: var(--bg-2); }
 .field { display: flex; gap: 8px; }
 input {
-  flex: 1; min-width: 0; height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--line);
-  background: var(--surface); color: var(--text); font: 15px ui-monospace, SFMono-Regular, Menlo, monospace;
+  flex: 1; min-width: 0; height: 40px; padding: 0 12px; border-radius: 6px; border: 1px solid var(--line-2);
+  background: var(--bg); color: var(--text); font: 400 14px/20px var(--mono); transition: border-color 150ms ease;
 }
-input:focus-visible, .btn:focus-visible, .ghost:focus-visible, [role=tab]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.ghost {
-  height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface);
-  color: var(--text); font: inherit; font-size: 14px; cursor: pointer;
-}
-.ghost:active { transform: scale(0.97); }
-.private { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13px; margin-top: 8px; }
-.private svg { flex: none; }
-.tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--line); margin-bottom: 14px; }
+input:hover { border-color: var(--text-2); }
+input::placeholder { color: var(--text-2); font-family: var(--sans); }
+.helper { color: var(--text-2); font-size: 14px; line-height: 20px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.tabs { display: flex; gap: 20px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--line); }
 .tabs::-webkit-scrollbar { display: none; }
 [role=tab] {
-  flex: none; padding: 8px 12px; border: 0; background: none; color: var(--muted); font: inherit; font-size: 14px;
-  cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px;
+  flex: none; padding: 0 0 10px; border: 0; background: none; color: var(--text-2); font: 500 14px/20px var(--sans);
+  cursor: pointer; box-shadow: inset 0 -2px 0 transparent; transition: color 150ms ease, box-shadow 150ms ease;
 }
-[role=tab][aria-selected=true] { color: var(--text); border-bottom-color: var(--accent); font-weight: 600; }
-[role=tab].off { font-style: italic; }
+[role=tab]:hover { color: var(--text); }
+[role=tab][aria-selected=true] { color: var(--text); box-shadow: inset 0 -2px 0 var(--text); }
+.panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding-top: 4px; }
 .panel[hidden] { display: none; }
-.code { position: relative; border: 1px solid var(--line); border-radius: 12px; background: var(--code-bg); }
-pre {
-  margin: 0; padding: 16px; padding-right: 88px; overflow-x: auto;
-  font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre;
+.panel code { font-size: 13px; }
+.code { position: relative; border: 1px solid var(--line); border-radius: 8px; background: var(--bg-2); }
+pre { margin: 0; padding: 16px 88px 16px 16px; overflow-x: auto; font-size: 13px; line-height: 20px; white-space: pre; }
+.copy { position: absolute; top: 10px; right: 10px; height: 28px; padding: 0 10px; font-size: 13px; }
+.copy.done { border-color: var(--text); }
+
+.section { padding: 32px 0 96px; border-top: 1px solid var(--line); row-gap: 32px; }
+.section-head { grid-column: 1 / span 4; display: grid; gap: 4px; align-content: start; }
+.section-head h2 { font-size: 24px; line-height: 32px; font-weight: 600; letter-spacing: -0.03em; }
+.section-head p { color: var(--text-2); }
+.tools { grid-column: 5 / span 8; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.tool { display: grid; gap: 8px; align-content: start; }
+.tool h3 { font: 500 14px/20px var(--mono); overflow-wrap: anywhere; }
+.tool p { color: var(--text-2); font-size: 14px; line-height: 22px; }
+.types { grid-column: 5 / span 8; color: var(--text-2); font-size: 14px; line-height: 22px; }
+.types code { color: var(--text); font-size: 13px; }
+
+footer { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 0 0 48px; font-size: 14px; line-height: 20px; color: var(--text-2); }
+footer .identity { color: var(--text); }
+footer a { color: var(--text); }
+
+@media (max-width: 900px) {
+  .opening > div, .step-head, .step-body, .section-head, .tools, .types { grid-column: 1 / -1; }
+  .step-body { padding-left: 36px; }
+  .opening { padding: 64px 0 48px; }
 }
-.copy {
-  position: absolute; top: 8px; right: 8px; height: 30px; padding: 0 12px; border-radius: 8px;
-  border: 1px solid var(--line); background: var(--surface); color: var(--text); font: inherit; font-size: 13px; cursor: pointer;
+@media (max-width: 640px) {
+  .shell { padding: 0 16px; }
+  h1 { font-size: 36px; line-height: 40px; letter-spacing: -0.04em; }
+  .lede { font-size: 18px; line-height: 28px; }
+  .step-body { padding-left: 0; }
+  .tools { grid-template-columns: 1fr; }
+  .meta span { display: none; }
+  footer { flex-direction: column; gap: 8px; }
 }
-.copy.done { color: var(--ok); }
-.note { padding: 14px 16px; border-radius: 12px; background: var(--warn-bg); color: var(--warn); font-size: 14px; }
-.tools { display: grid; gap: 10px; margin-top: 14px; }
-.tool { padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
-.tool code { font: 600 14px ui-monospace, SFMono-Regular, Menlo, monospace; }
-.tool p { color: var(--muted); font-size: 14px; margin-top: 4px; }
-.fine { color: var(--muted); font-size: 13px; margin-top: 12px; }
-.fine code, .hint code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.92em; }
-footer { max-width: 720px; margin: 24px auto 0; padding: 24px 16px 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
-footer p + p { margin-top: 6px; }
-footer a { color: var(--text); text-underline-offset: 3px; }
-.heart { color: #d93025; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 `;
 
@@ -236,13 +268,6 @@ const SCRIPT = `
 })();
 `;
 
-const Lock = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <rect x="4" y="11" width="16" height="10" rx="2" />
-    <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-  </svg>
-);
-
 export const SetupPage = ({ mcpUrl }: { mcpUrl: string }) => (
   <html lang="en">
     <head>
@@ -254,115 +279,130 @@ export const SetupPage = ({ mcpUrl }: { mcpUrl: string }) => (
       <style>{raw(STYLE)}</style>
     </head>
     <body>
-      <main>
-        <div class="eyebrow">Advocu MCP</div>
-        <h1>Log your GDE work from your agent</h1>
-        <p class="lede">
-          Hand your agent the photos, links, or slides. It writes the Advocu draft. You review it and submit it in the
-          portal. Setup takes two minutes.
-        </p>
-
-        <section class="step">
-          <div class="num">1</div>
-          <div>
-            <h2>Get your personal API token</h2>
-            <p class="hint">Open the Advocu portal, click “Generate your token”, then copy it.</p>
-            <a class="btn" href={PORTAL_TOKEN_URL} target="_blank" rel="noopener noreferrer">
-              Open Advocu portal
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M7 17 17 7M8 7h9v9" />
-              </svg>
-            </a>
+      <a class="skip" href="#main">Skip to content</a>
+      <div class="shell">
+        <header class="masthead">
+          <span class="identity">Advocu MCP</span>
+          <div class="meta">
+            <span>Not affiliated with Advocu or Google</span>
+            <a href="https://github.com/Spikeysanju/advocu-mcp" target="_blank" rel="noopener noreferrer">GitHub</a>
           </div>
-        </section>
+        </header>
 
-        <section class="step">
-          <div class="num">2</div>
-          <div>
-            <h2>Paste it here</h2>
-            <p class="hint">Every snippet below fills in as you type.</p>
-            <div class="field">
-              <label for="token" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)">
-                Advocu personal API token
-              </label>
-              <input id="token" type="password" placeholder="Paste your token" autocomplete="off" autocapitalize="off" spellcheck={false} />
-              <button id="reveal" class="ghost" type="button">Show</button>
-            </div>
-            <p class="private">
-              <Lock /> Stays in this browser tab. It is never sent to this server or saved.
-            </p>
-          </div>
-        </section>
-
-        <section class="step">
-          <div class="num">3</div>
-          <div style="min-width:0">
-            <h2>Add it to your client</h2>
-            <p class="hint">Copy the snippet for your client. Then restart it or reload its MCP servers.</p>
-            <div class="tabs" role="tablist" aria-label="MCP client">
-              {CLIENTS.map((cl, i) => (
-                <button role="tab" type="button" id={`tab-${cl.id}`} aria-controls={`panel-${cl.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1}>
-                  {cl.name}
-                </button>
-              ))}
-              <button role="tab" type="button" class="off" id="tab-chatgpt" aria-controls="panel-chatgpt" aria-selected="false" tabindex={-1}>
-                ChatGPT
-              </button>
-            </div>
-            {CLIENTS.map((cl, i) => {
-              const tpl = cl.snippet(mcpUrl);
-              return (
-                <div class="panel" role="tabpanel" id={`panel-${cl.id}`} aria-labelledby={`tab-${cl.id}`} hidden={i !== 0}>
-                  <p class="hint">{cl.where}</p>
-                  <div class="code">
-                    <pre id={`code-${cl.id}`} data-tpl={tpl} data-lang={cl.lang}>{tpl}</pre>
-                    <button class="copy" type="button" data-for={`code-${cl.id}`}>Copy</button>
-                  </div>
-                </div>
-              );
-            })}
-            <div class="panel" role="tabpanel" id="panel-chatgpt" aria-labelledby="tab-chatgpt" hidden>
-              <p class="note">
-                Not supported yet. ChatGPT connectors only offer OAuth or no auth, and cannot send an{" "}
-                <code>Authorization: Bearer</code> header. This server never takes your token any other way.
+        <main id="main">
+          <div class="opening grid">
+            <div>
+              <h1>Log your GDE work from your agent</h1>
+              <p class="lede">
+                Hand your agent the photos, links, or slides. It writes the Advocu draft. You review it and submit it in
+                the portal. Setup takes two minutes.
               </p>
             </div>
-            <p class="fine">
-              Server URL: <code>{mcpUrl}</code>. Any MCP client that can send an HTTP header works.
-            </p>
           </div>
-        </section>
 
-        <section>
-          <h2>What your agent can do</h2>
-          <p class="hint">Three tools. Nothing is ever submitted, archived, or deleted for you.</p>
-          <div class="tools">
-            {TOOLS.map((t) => (
-              <div class="tool">
-                <code>{t.name}</code>
-                <p>{t.body}</p>
+          <ol class="steps">
+            <li class="step grid">
+              <div class="step-head">
+                <span class="step-num">1</span>
+                <h2>Get your personal API token</h2>
+                <p>In the portal, click “Generate your token” and copy it.</p>
               </div>
-            ))}
-          </div>
-          <p class="fine">
-            Drafts: <code>content-creation</code>, <code>interaction-with-googlers</code>, <code>mentoring</code>,{" "}
-            <code>product-feedback-given</code>, <code>public-speaking</code>, <code>stories</code>, <code>workshop</code>.{" "}
-            <code>github-repository</code> and <code>youtube-video</code> can be listed, but not created or updated.
-          </p>
-        </section>
-      </main>
+              <div class="step-body">
+                <a class="btn" href={PORTAL_TOKEN_URL} target="_blank" rel="noopener noreferrer">
+                  Open Advocu portal<span class="sr"> (opens in a new tab)</span>
+                </a>
+              </div>
+            </li>
 
-      <footer>
-        <p>
-          I kept losing weekends to the Advocu form, so I built this. Made with <span class="heart">♥</span> by{" "}
-          <a href="https://sanju.sh" target="_blank" rel="noopener">sanju.sh</a>.
-        </p>
-        <p>
-          Open source on{" "}
-          <a href="https://github.com/Spikeysanju/advocu-mcp" target="_blank" rel="noopener noreferrer">GitHub</a>, Apache-2.0.
-          Not affiliated with Advocu or Google.
-        </p>
-      </footer>
+            <li class="step grid">
+              <div class="step-head">
+                <span class="step-num">2</span>
+                <h2>Paste it here</h2>
+                <p>Every snippet in the next step fills in as you type.</p>
+              </div>
+              <div class="step-body">
+                <div class="field">
+                  <label for="token" class="sr">Advocu personal API token</label>
+                  <input id="token" type="password" placeholder="Paste your token" autocomplete="off" autocapitalize="off" spellcheck={false} />
+                  <button id="reveal" class="btn-2" type="button">Show</button>
+                </div>
+                <p class="helper">The token stays in this browser tab. It is never sent to this server or saved.</p>
+              </div>
+            </li>
+
+            <li class="step grid">
+              <div class="step-head">
+                <span class="step-num">3</span>
+                <h2>Add it to your client</h2>
+                <p>Copy the snippet for your client, then restart it or reload its MCP servers.</p>
+              </div>
+              <div class="step-body">
+                <div class="tabs" role="tablist" aria-label="MCP client">
+                  {CLIENTS.map((cl, i) => (
+                    <button role="tab" type="button" id={`tab-${cl.id}`} aria-controls={`panel-${cl.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1}>
+                      {cl.name}
+                    </button>
+                  ))}
+                  <button role="tab" type="button" id="tab-chatgpt" aria-controls="panel-chatgpt" aria-selected="false" tabindex={-1}>
+                    ChatGPT
+                  </button>
+                </div>
+                {CLIENTS.map((cl, i) => {
+                  const tpl = cl.snippet(mcpUrl);
+                  return (
+                    <div class="panel" role="tabpanel" id={`panel-${cl.id}`} aria-labelledby={`tab-${cl.id}`} hidden={i !== 0}>
+                      <p class="helper">{cl.where}</p>
+                      <div class="code">
+                        <pre id={`code-${cl.id}`} data-tpl={tpl} data-lang={cl.lang}>{tpl}</pre>
+                        <button class="copy btn-2" type="button" data-for={`code-${cl.id}`}>Copy</button>
+                      </div>
+                    </div>
+                  );
+                })}
+                <div class="panel" role="tabpanel" id="panel-chatgpt" aria-labelledby="tab-chatgpt" hidden>
+                  <p>Not supported yet.</p>
+                  <p class="helper">
+                    ChatGPT connectors only offer OAuth or no auth, so they cannot send an <code>Authorization: Bearer</code>{" "}
+                    header. This server never takes your token any other way.
+                  </p>
+                </div>
+                <p class="helper">
+                  Server URL <code>{mcpUrl}</code>. Any MCP client that can send an HTTP header works.
+                </p>
+              </div>
+            </li>
+          </ol>
+
+          <section class="section grid" aria-labelledby="tools-heading">
+            <div class="section-head">
+              <h2 id="tools-heading">What your agent can do</h2>
+              <p>Three tools. Nothing is ever submitted, archived, or deleted for you.</p>
+            </div>
+            <div class="tools">
+              {TOOLS.map((t) => (
+                <div class="tool">
+                  <h3>{t.name}</h3>
+                  <p>{t.body}</p>
+                </div>
+              ))}
+            </div>
+            <p class="types">
+              Draft types: <code>content-creation</code>, <code>interaction-with-googlers</code>, <code>mentoring</code>,{" "}
+              <code>product-feedback-given</code>, <code>public-speaking</code>, <code>stories</code>,{" "}
+              <code>workshop</code>. <code>github-repository</code> and <code>youtube-video</code> can be listed, but not
+              created or updated.
+            </p>
+          </section>
+        </main>
+
+        <footer>
+          <span class="identity">Advocu MCP</span>
+          <span>
+            I kept losing weekends to the Advocu form, so I built this. Made with ♥ by{" "}
+            <a href="https://sanju.sh" target="_blank" rel="noopener">sanju.sh</a>
+          </span>
+        </footer>
+      </div>
       {html`<script>${raw(SCRIPT)}</script>`}
     </body>
   </html>
