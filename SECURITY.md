@@ -10,7 +10,7 @@
 
 ## Reporting a vulnerability
 
-Email [hello@thisux.com](mailto:hello@thisux.com) with the subject `[security] advocu-mcp`.
+Email [hi@sanju.sh](mailto:hi@sanju.sh) with the subject `[security] advocu-mcp`.
 
 Include what you found, how to reproduce it, and the impact. Do not open a public GitHub issue, discussion, or pull request for a security-sensitive finding. Do not include a live Advocu personal API token in the report. A redacted header shape is enough.
 

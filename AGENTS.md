@@ -4,7 +4,7 @@ Instructions for coding agents working in this repo.
 
 Advocu MCP is a stateless Cloudflare Worker. It exposes three MCP tools for the Advocu GDE Personal API. It forwards the caller's portal token and returns Advocu's JSON. It does not own activities, users, or credentials.
 
-Created by [Sanju Sivalingam](https://sanju.sh), founder of [THISUX](https://thisux.com). Copyright © 2026 THISUX Private Limited. Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+Created by [Sanju Sivalingam](https://sanju.sh), founder of [THISUX](https://thisux.com). Copyright © 2026 Sanju Sivalingam. Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
 ## Read before changing behavior
 
@@ -30,7 +30,7 @@ Do not invent a field, route, enum, or error shape that is not in `docs/API.md`.
 - Do not invent metrics, attendee counts, countries, cities, or links. Omit fields the user did not give.
 - `GET /health` and `GET /` must not echo headers.
 
-Product token rules: [docs/SECURITY.md](docs/SECURITY.md). Vulnerability reports: [SECURITY.md](SECURITY.md), email hello@thisux.com, subject `[security] advocu-mcp`. Do not open a public issue for those.
+Product token rules: [docs/SECURITY.md](docs/SECURITY.md). Vulnerability reports: [SECURITY.md](SECURITY.md), email hi@sanju.sh, subject `[security] advocu-mcp`. Do not open a public issue for those.
 
 ## Layout
 

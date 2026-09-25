@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping with Advocu MCP. This is a remote MCP server on Cloudflare Workers for the Advocu GDE Personal API. Contributions are licensed under the [Apache License, Version 2.0](LICENSE), with copyright held by THISUX Private Limited.
+Thanks for helping with Advocu MCP. This is a remote MCP server on Cloudflare Workers for the Advocu GDE Personal API. Contributions are licensed under the [Apache License, Version 2.0](LICENSE), with copyright held by Sanju Sivalingam.
 
 By submitting a pull request, you agree that your contribution is provided under that license and copyright.
 
@@ -37,4 +37,4 @@ Read [docs/README.md](docs/README.md) before changing behavior. If two docs disa
 4. Run `bun run test` and `bun run typecheck`.
 5. Open a pull request using the template. Do not paste tokens or private activity text.
 
-Questions about conduct go to [hello@thisux.com](mailto:hello@thisux.com). See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md). Security reports go to the same address with subject `[security] advocu-mcp`. See [SECURITY.md](SECURITY.md). Do not file those in public issues.
+Questions about conduct go to [hi@sanju.sh](mailto:hi@sanju.sh). See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md). Security reports go to the same address with subject `[security] advocu-mcp`. See [SECURITY.md](SECURITY.md). Do not file those in public issues.

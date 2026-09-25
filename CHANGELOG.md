@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- License is the Apache License, Version 2.0. Copyright remains THISUX Private Limited.
+- License is the Apache License, Version 2.0.
+- Copyright holder is Sanju Sivalingam. Contact is hi@sanju.sh.
 
 ## [0.1.0] - 2026-09-25
 
