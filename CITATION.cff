@@ -3,10 +3,12 @@ message: "If you use this software, please cite it as below."
 type: software
 title: "Advocu MCP"
 authors:
-  - name: "THISUX Private Limited"
-    website: "https://thisux.com"
+  - given-names: Sanju
+    family-names: Sivalingam
+    alias: Spikeysanju
+    website: "https://github.com/Spikeysanju"
 license: Apache-2.0
-repository-code: "https://github.com/thisuxhq/advocu-mcp"
-url: "https://github.com/thisuxhq/advocu-mcp"
+repository-code: "https://github.com/Spikeysanju/advocu-mcp"
+url: "https://github.com/Spikeysanju/advocu-mcp"
 date-released: "2026-09-25"
 version: "0.1.0"
