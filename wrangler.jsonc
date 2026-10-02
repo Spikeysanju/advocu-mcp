@@ -3,7 +3,25 @@
   "name": "advocu-mcp",
   "main": "src/index.tsx",
   "compatibility_date": "2026-09-25",
-  "observability": { "enabled": true },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "redact_query_string": false,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "invocation_logs": true,
+      "persist": true
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true
+    },
+    "issues": {
+      "enabled": false
+    }
+  },
   "workers_dev": true,
   "routes": [{ "pattern": "advocu.sanju.sh", "custom_domain": true }]
 }
