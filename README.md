@@ -59,6 +59,21 @@ bun run dev      # wrangler dev
 bun run deploy   # wrangler deploy
 ```
 
+## Deploy from GitHub
+
+Pushes to `main` deploy through [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/). Set these in the Worker's Settings → Builds:
+
+| Setting | Value |
+| --- | --- |
+| Production branch | `main` |
+| Root directory | `/` |
+| Build command | `bun run test && bun run typecheck` |
+| Deploy command | `bunx wrangler deploy` |
+| Non-production branch deploy command | `bunx wrangler versions upload` |
+| Build variables | none |
+
+Workers Builds runs `bun install` on its own because `bun.lock` is present. `wrangler deploy` bundles `src/index.tsx` and reads the `advocu.sanju.sh` route from `wrangler.jsonc`. The Worker name in the dashboard must be `advocu-mcp`, the same as `name` in `wrangler.jsonc`. No secrets are needed. The Worker stores no token.
+
 Specs live in [docs/](./docs/README.md).
 
 ## Community
