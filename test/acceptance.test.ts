@@ -213,7 +213,8 @@ describe("without a token", () => {
 
   it("A-15 wrangler.jsonc has no KV, D1, or Durable Object bindings", async () => {
     const { readFileSync } = await import("node:fs");
-    const cfg = readFileSync(new URL("../wrangler.jsonc", import.meta.url), "utf8");
+    const { fileURLToPath } = await import("node:url");
+    const cfg = readFileSync(fileURLToPath(new URL("../wrangler.jsonc", import.meta.url).href), "utf8");
     expect(cfg).not.toMatch(/kv_namespaces|d1_databases|durable_objects/);
   });
 
