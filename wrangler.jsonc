@@ -22,6 +22,7 @@
       "enabled": false
     }
   },
+  "vars": {},
   "workers_dev": true,
   "routes": [{ "pattern": "advocu.sanju.sh", "custom_domain": true }]
 }
